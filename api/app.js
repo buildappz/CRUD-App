@@ -6,6 +6,7 @@ var logger = require('morgan');
 var express = require("express");
 var bodyParser = require("body-parser");
 var cors = require("cors");
+require('dotenv').config()
 
 var corsOptions = {
   origin: "http://localhost:8081"
@@ -16,7 +17,7 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
-const db = require("./app/models");
+const db = require("./models");
 db.sequelize.sync();
 
 db.sequelize.sync({ force: true }).then(() => {
