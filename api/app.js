@@ -14,8 +14,10 @@ var corsOptions = {
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var tutorialsRouter = require('./routes/turorial.routes');
 
 var app = express();
+//require("./routes/turorial.routes")(app);
 
 const db = require("./models");
 db.sequelize.sync();
@@ -43,6 +45,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/tutorials', tutorialsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
