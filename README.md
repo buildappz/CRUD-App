@@ -309,6 +309,22 @@ export default new TutorialDataService();
 
 ```
 
+In src folder, create common/with-router.js file with following code:
+
+```js
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+
+export const withRouter = (Component) => {
+  function ComponentWithRouterProp(props) {
+    let location = useLocation();
+    let navigate = useNavigate();
+    let params = useParams();
+    return <Component {...props} router={{ location, navigate, params }} />;
+  }
+  return ComponentWithRouterProp;
+};
+```
+
 ### Create React Components
 
 Add item Component
