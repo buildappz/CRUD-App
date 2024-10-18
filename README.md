@@ -1,7 +1,7 @@
 # CRUD-App
 React + Node.js + Express + PostgreSQL example: Build a CRUD App
 
-## How to start
+## How to start (Expressjs backend api)
 
 ```bash
 mkdir CRUD-APP
@@ -216,4 +216,142 @@ exports.findAllPublished = (req, res) => {
 
 ```bash
 npm start
+```
+
+## React.js Front-end
+
+Setup React.js Project
+
+```bash
+cd CRUD-APP
+npx create-react-app client
+```
+
+Import Bootstrap to  React CRUD App
+```bash
+cd client
+npm install bootstrap
+```
+
+Open client/src/App.js and add this import at the top
+
+```js
+import "bootstrap/dist/css/bootstrap.min.css";
+```
+
+### Add React Router to React CRUD App
+
+Import Bootstrap to  React CRUD App
+```bash
+npm install react-router-dom
+```
+
+Open src/index.js and wrap App component by BrowserRouter object.
+
+![Add BrowserRouter to index.js](docs/images/codebase_client_src_index.js_v1.png)
+
+### Initialize Axios for React CRUD HTTP Client
+Let’s install axios with command:
+```bash
+npm install axios
+```
+Under src folder, we create http-common.js file with following code:
+```js
+import axios from "axios";
+
+export default axios.create({
+  baseURL: "http://localhost:8080/api",
+  headers: {
+    "Content-type": "application/json"
+  }
+});
+```
+### Create Data Service
+
+In this step, we’re gonna create a service that uses axios object above to send HTTP requests.
+
+services/tutorial.service.js
+
+```js
+import http from "../http-common";
+
+class TutorialDataService {
+  getAll() {
+    return http.get("/tutorials");
+  }
+
+  get(id) {
+    return http.get(`/tutorials/${id}`);
+  }
+
+  create(data) {
+    return http.post("/tutorials", data);
+  }
+
+  update(id, data) {
+    return http.put(`/tutorials/${id}`, data);
+  }
+
+  delete(id) {
+    return http.delete(`/tutorials/${id}`);
+  }
+
+  deleteAll() {
+    return http.delete(`/tutorials`);
+  }
+
+  findByTitle(title) {
+    return http.get(`/tutorials?title=${title}`);
+  }
+}
+
+export default new TutorialDataService();
+
+```
+
+### Add Navbar to React CRUD App
+
+Open src/App.js, this App component is the root container for our application, it will contain a navbar, and also, a Routes object with several Route. Each Route points to a React Component.
+
+```js
+import React, { Component } from "react";
 ...
+
+class App extends Component {
+  render() {
+    return (
+      <div>
+        <nav className="navbar navbar-expand navbar-dark bg-dark">
+          <a href="/tutorials" className="navbar-brand">
+            bezKoder
+          </a>
+          <div className="navbar-nav mr-auto">
+            <li className="nav-item">
+              <Link to={"/tutorials"} className="nav-link">
+                Tutorials
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to={"/add"} className="nav-link">
+                Add
+              </Link>
+            </li>
+          </div>
+        </nav>
+
+        <div className="container mt-3">
+          <Routes>
+            <Route path="/" element={<TutorialsList/>} />
+            <Route path="/tutorials" element={<TutorialsList/>} />
+            <Route path="/add" element={<AddTutorial/>} />
+            <Route path="/tutorials/:id" element={<Tutorial/>} />
+          </Routes>
+        </div>
+      </div>
+    );
+  }
+}
+
+export default App;
+
+```
